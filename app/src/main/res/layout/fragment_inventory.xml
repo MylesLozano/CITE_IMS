@@ -8,48 +8,76 @@
     <!-- EditText for Item Name -->
     <EditText
         android:id="@+id/nameEditText"
-        android:layout_width="0dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Item Name"
-        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="item name"
+        android:hint="@string/item_name"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- EditText for Description -->
+    <!-- EditText for Item Description -->
     <EditText
         android:id="@+id/descriptionEditText"
-        android:layout_width="0dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Description"
-        app:layout_constraintTop_toBottomOf="@id/nameEditText"
-        app:layout_constraintStart_toStartOf="parent"
+        android:autofillHints="description"
+        android:hint="@string/description"
+        android:inputType="text"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nameEditText" />
 
-    <!-- EditText for Quantity -->
+    <!-- EditText for Item Quantity -->
     <EditText
         android:id="@+id/quantityEditText"
-        android:layout_width="0dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Quantity"
+        android:autofillHints="quantity"
+        android:hint="@string/quantity"
         android:inputType="number"
-        app:layout_constraintTop_toBottomOf="@id/descriptionEditText"
-        app:layout_constraintStart_toStartOf="parent"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
 
     <!-- Button to Add Item -->
     <Button
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Item"
+        android:text="@string/add_item"
         app:layout_constraintTop_toBottomOf="@id/quantityEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintEnd_toStartOf="@id/updateButton"
+        android:layout_marginBottom="8dp" />
 
-    <!-- RecyclerView to display inventory -->
+    <!-- Button to Update Item -->
+    <Button
+        android:id="@+id/updateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/update_item"
+        app:layout_constraintTop_toBottomOf="@id/quantityEditText"
+        app:layout_constraintStart_toEndOf="@id/addButton"
+        app:layout_constraintEnd_toStartOf="@id/deleteButton"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Button to Delete Item -->
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_item"
+        app:layout_constraintTop_toBottomOf="@id/quantityEditText"
+        app:layout_constraintStart_toEndOf="@id/updateButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp" />
+
+    <!-- RecyclerView for Inventory List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inventoryRecyclerView"
         android:layout_width="0dp"
@@ -57,7 +85,6 @@
         app:layout_constraintTop_toBottomOf="@id/addButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

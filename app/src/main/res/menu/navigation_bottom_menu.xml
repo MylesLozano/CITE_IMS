@@ -1,37 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <!-- Home Menu Item -->
-    <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/ic_home"
-        android:title="Home"
-        android:enabled="true"
-        app:showAsAction="ifRoom" />
-
-    <!-- Inventory Menu Item -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_inventory"
-        android:icon="@drawable/ic_inventory"
-        android:title="Inventory"
-        android:enabled="true"
-        app:showAsAction="ifRoom" />
-
-    <!-- Profile Menu Item (for user profile) -->
-    <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_user_profile"
-        android:title="Profile"
-        android:enabled="true"
-        app:showAsAction="ifRoom" />
-
-    <!-- Reports Menu Item -->
+        android:title="@string/inventory"
+        android:icon="@drawable/ic_inventory"/>
     <item
         android:id="@+id/nav_reports"
-        android:icon="@drawable/ic_reports"
-        android:title="Reports"
-        android:enabled="true"
-        app:showAsAction="ifRoom" />
-
+        android:title="@string/reports"
+        android:icon="@drawable/ic_reports"/>
+    <item
+        android:id="@+id/nav_profile"
+        android:title="@string/profile"
+        android:icon="@drawable/ic_profile"/>
 </menu>

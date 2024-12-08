@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class UserSessionManager {
-
-    // Shared Preferences file name and keys
     private static final String PREF_NAME = "UserSession";
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String KEY_USERNAME = "username";
@@ -20,10 +18,10 @@ public class UserSessionManager {
     }
 
     /**
-     * Create a new login session.
+     * Creates a login session for the user.
      *
-     * @param username The username of the user.
-     * @param role The role of the user (e.g., "admin" or "user").
+     * @param username The username of the logged-in user.
+     * @param role     The role of the logged-in user (e.g., "admin", "user").
      */
     public void createLoginSession(String username, String role) {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
@@ -33,37 +31,67 @@ public class UserSessionManager {
     }
 
     /**
-     * Check if the user is logged in.
+     * Checks if the user is logged in.
      *
-     * @return true if the user is logged in, false otherwise.
+     * @return True if logged in, false otherwise.
      */
     public boolean isUserLoggedIn() {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
     /**
-     * Get the username of the logged-in user.
+     * Retrieves the logged-in user's username.
      *
-     * @return The username as a String, or null if not logged in.
+     * @return The username, or null if no session exists.
      */
     public String getUsername() {
         return sharedPreferences.getString(KEY_USERNAME, null);
     }
 
     /**
-     * Get the role of the logged-in user.
+     * Retrieves the logged-in user's role.
      *
-     * @return The role as a String, or null if not logged in.
+     * @return The role, or null if no session exists.
      */
     public String getRole() {
         return sharedPreferences.getString(KEY_ROLE, null);
     }
 
     /**
-     * Log out the user by clearing all session data.
+     * Checks if the logged-in user is an admin.
+     *
+     * @return True if the user is an admin, false otherwise.
+     */
+    public boolean isAdmin() {
+        String role = getRole();
+        return role != null && role.equalsIgnoreCase("admin");
+    }
+
+    /**
+     * Checks if the logged-in user is a regular user.
+     *
+     * @return True if the user is a regular user, false otherwise.
+     */
+    public boolean isUser() {
+        String role = getRole();
+        return role != null && role.equalsIgnoreCase("user");
+    }
+
+    /**
+     * Logs out the current user and clears all session data.
      */
     public void logoutUser() {
         editor.clear();
         editor.apply();
+    }
+
+    /**
+     * Retrieves all session details as a string (for debugging or display purposes).
+     *
+     * @return Session details in a formatted string.
+     */
+    public String getSessionDetails() {
+        return "Username: " + getUsername() + "\nRole: " + getRole() +
+                "\nLogged In: " + isUserLoggedIn();
     }
 }

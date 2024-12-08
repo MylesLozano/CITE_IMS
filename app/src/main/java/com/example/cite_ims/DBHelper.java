@@ -9,13 +9,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
-
     private static final String DATABASE_NAME = "inventoryManagement.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // User Table
     private static final String TABLE_USERS = "users";
-    private static final String COLUMN_USER_ID = "id";
+    protected static final String COLUMN_USER_ID = "id";
     private static final String COLUMN_USERNAME = "username";
     protected static final String COLUMN_PASSWORD = "password";
     protected static final String COLUMN_ROLE = "role";
@@ -33,19 +32,29 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create Users Table
-        db.execSQL("CREATE TABLE " + TABLE_USERS + " (" +
+        db.execSQL("CREATE TABLE " + TABLE_USERS + "(" +
                 COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_USERNAME + " TEXT, " +
                 COLUMN_PASSWORD + " TEXT, " +
                 COLUMN_ROLE + " TEXT)");
 
-        // Create Inventory Table
-        db.execSQL("CREATE TABLE " + TABLE_INVENTORY + " (" +
+        db.execSQL("CREATE TABLE " + TABLE_INVENTORY + "(" +
                 COLUMN_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ITEM_NAME + " TEXT, " +
                 COLUMN_ITEM_DESCRIPTION + " TEXT, " +
                 COLUMN_ITEM_QUANTITY + " INTEGER)");
+
+        // Add initial users
+        addUser(db, "admin", "admin123", "admin");
+        addUser(db, "user1", "user123", "user");
+    }
+
+    private void addUser(SQLiteDatabase db, String username, String password, String role) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USERNAME, username);
+        values.put(COLUMN_PASSWORD, password);
+        values.put(COLUMN_ROLE, role);
+        db.insert(TABLE_USERS, null, values);
     }
 
     @Override
@@ -55,7 +64,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Add User
+    // User CRUD
     public long addUser(String username, String password, String role) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -65,29 +74,21 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_USERS, null, values);
     }
 
-    // Authenticate User (Login)
-    public boolean authenticateUser(String username, String password, String role) {
+    public Cursor getUserByUsername(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS +
-                " WHERE " + COLUMN_USERNAME + " = ? AND " +
-                COLUMN_PASSWORD + " = ? AND " +
-                COLUMN_ROLE + " = ?", new String[]{username, password, role});
-        boolean isAuthenticated = cursor.getCount() > 0;
-        cursor.close();
-        return isAuthenticated;
+        return db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USERNAME + " = ?", new String[]{username});
     }
 
-    // Fetch All Users
     public ArrayList<User> getAllUsers() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS, null);
         ArrayList<User> userList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS, null);
 
         if (cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(0);
-                String username = cursor.getString(1);
-                String role = cursor.getString(3); // Password is excluded for privacy
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID));
+                String username = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USERNAME));
+                String role = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ROLE));
                 userList.add(new User(id, username, role));
             } while (cursor.moveToNext());
         }
@@ -95,7 +96,20 @@ public class DBHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    // Add Inventory Item
+    public int updateUser(int userId, String newPassword, String newRole) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PASSWORD, newPassword);
+        values.put(COLUMN_ROLE, newRole);
+        return db.update(TABLE_USERS, values, COLUMN_USER_ID + " = ?", new String[]{String.valueOf(userId)});
+    }
+
+    public void deleteUser(int userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_USERS, COLUMN_USER_ID + " = ?", new String[]{String.valueOf(userId)});
+    }
+
+    // Inventory CRUD
     public long addInventoryItem(String name, String description, int quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -105,18 +119,17 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_INVENTORY, null, values);
     }
 
-    // Fetch All Inventory Items
     public ArrayList<InventoryItem> getAllInventoryItems() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_INVENTORY, null);
         ArrayList<InventoryItem> itemList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_INVENTORY, null);
 
         if (cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(0);
-                String name = cursor.getString(1);
-                String description = cursor.getString(2);
-                int quantity = cursor.getInt(3);
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ITEM_ID));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ITEM_NAME));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ITEM_DESCRIPTION));
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ITEM_QUANTITY));
                 itemList.add(new InventoryItem(id, name, description, quantity));
             } while (cursor.moveToNext());
         }
@@ -124,34 +137,17 @@ public class DBHelper extends SQLiteOpenHelper {
         return itemList;
     }
 
-    // Get Inventory Count
-    public int getInventoryCount() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_INVENTORY, null);
-        int count = 0;
-        if (cursor.moveToFirst()) {
-            count = cursor.getInt(0);
-        }
-        cursor.close();
-        return count;
+    public int updateInventoryItem(int itemId, String name, String description, int quantity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ITEM_NAME, name);
+        values.put(COLUMN_ITEM_DESCRIPTION, description);
+        values.put(COLUMN_ITEM_QUANTITY, quantity);
+        return db.update(TABLE_INVENTORY, values, COLUMN_ITEM_ID + " = ?", new String[]{String.valueOf(itemId)});
     }
 
-    // Get Total Quantity
-    public int getInventoryTotalQuantity() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_ITEM_QUANTITY + ") FROM " + TABLE_INVENTORY, null);
-        int total = 0;
-        if (cursor.moveToFirst()) {
-            total = cursor.getInt(0);
-        }
-        cursor.close();
-        return total;
+    public void deleteInventoryItem(int itemId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_INVENTORY, COLUMN_ITEM_ID + " = ?", new String[]{String.valueOf(itemId)});
     }
-
-    // Fetch user by username
-    public Cursor getUserByUsername(String username) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM users WHERE username = ?", new String[]{username});
-    }
-
 }

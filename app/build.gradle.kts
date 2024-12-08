@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    kotlin("plugin.serialization") version "2.0.21"
 }
 
 android {
@@ -32,7 +33,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.material.v190)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.fragment.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

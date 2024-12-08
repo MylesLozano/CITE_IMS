@@ -2,13 +2,17 @@
     <item
         android:id="@+id/nav_inventory"
         android:icon="@drawable/ic_inventory"
-        android:title="Inventory" />
+        android:title="@string/inventory" />
     <item
         android:id="@+id/nav_reports"
         android:icon="@drawable/ic_reports"
-        android:title="Reports" />
+        android:title="@string/reports" />
     <item
         android:id="@+id/nav_user_management"
         android:icon="@drawable/ic_users"
-        android:title="Users" />
+        android:title="@string/users" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_logout"
+        android:title="@string/logout" />
 </menu>

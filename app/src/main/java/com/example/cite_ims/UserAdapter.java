@@ -13,10 +13,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     private final Context context;
     private final ArrayList<User> userList;
+    private final OnUserClickListener onUserClickListener;
 
-    public UserAdapter(Context context, ArrayList<User> userList, DBHelper dbHelper) {
+    public interface OnUserClickListener {
+        void onUserClick(User user);
+    }
+
+    public UserAdapter(Context context, ArrayList<User> userList, OnUserClickListener listener) {
         this.context = context;
         this.userList = userList;
+        this.onUserClickListener = listener;
     }
 
     @NonNull
@@ -31,6 +37,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         User user = userList.get(position);
         holder.usernameTextView.setText(user.getUsername());
         holder.roleTextView.setText("Role: " + user.getRole());
+
+        holder.itemView.setOnClickListener(v -> onUserClickListener.onUserClick(user));
     }
 
     @Override

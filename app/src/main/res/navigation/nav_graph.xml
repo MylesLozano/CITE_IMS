@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nav xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/fragment_home">
+
+    <!-- Home Fragment -->
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="com.example.cite_ims.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+
+    <!-- Inventory Fragment -->
+    <fragment
+        android:id="@+id/fragment_inventory"
+        android:name="com.example.cite_ims.InventoryFragment"
+        android:label="Inventory"
+        tools:layout="@layout/fragment_inventory" />
+
+    <!-- User Profile Fragment -->
+    <fragment
+        android:id="@+id/fragment_user_profile"
+        android:name="com.example.cite_ims.UserProfileFragment"
+        android:label="User Profile"
+        tools:layout="@layout/fragment_user_profile" />
+
+    <!-- User Management Fragment (Admin Only) -->
+    <fragment
+        android:id="@+id/fragment_user_management"
+        android:name="com.example.cite_ims.UserManagementFragment"
+        android:label="User Management"
+        tools:layout="@layout/fragment_user_management" />
+
+    <!-- Reports Fragment (Admin Only) -->
+    <fragment
+        android:id="@+id/fragment_reports"
+        android:name="com.example.cite_ims.ReportsFragment"
+        android:label="Reports"
+        tools:layout="@layout/fragment_reports" />
+
+</nav>

@@ -7,7 +7,7 @@
         <item name="colorPrimaryVariant">#4B0082</item> <!-- Darker Royal Purple -->
         <item name="colorOnPrimary">#FFFFFF</item> <!-- White for text/icons on purple -->
 
-        <!-- Secondary Colors -->
+        <!-- Secondary Colors -->yes
         <item name="colorSecondary">#FFD700</item> <!-- Royal Gold -->
         <item name="colorSecondaryVariant">#FFC107</item> <!-- Slightly darker gold -->
         <item name="colorOnSecondary">#FFFFFF</item> <!-- White for text/icons on gold -->

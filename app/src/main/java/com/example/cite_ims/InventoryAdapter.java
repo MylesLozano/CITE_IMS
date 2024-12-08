@@ -5,20 +5,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+//import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryViewHolder> {
+    private final Context context;
+    private final ArrayList<InventoryItem> inventoryList;
+    private final OnItemClickListener onItemClickListener;
 
-    private Context context;
-    private ArrayList<InventoryItem> inventoryList;
-    private DBHelper dbHelper;
+    public interface OnItemClickListener {
+        void onItemClick(InventoryItem item);
+    }
 
-    public InventoryAdapter(Context context, ArrayList<InventoryItem> inventoryList, DBHelper dbHelper) {
+    public InventoryAdapter(Context context, ArrayList<InventoryItem> inventoryList, OnItemClickListener listener) {
         this.context = context;
         this.inventoryList = inventoryList;
-        this.dbHelper = dbHelper;
+        this.onItemClickListener = listener;
     }
 
     @NonNull
@@ -33,6 +37,9 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
         InventoryItem item = inventoryList.get(position);
         holder.nameTextView.setText(item.getName());
         holder.quantityTextView.setText("Quantity: " + item.getQuantity());
+
+        // Handle item click
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(item));
     }
 
     @Override

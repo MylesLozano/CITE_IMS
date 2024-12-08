@@ -5,46 +5,75 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <!-- Username Input -->
     <EditText
         android:id="@+id/usernameEditText"
-        android:layout_width="0dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Username"
-        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="username"
+        android:hint="@string/username"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Password Input -->
     <EditText
         android:id="@+id/passwordEditText"
-        android:layout_width="0dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:autofillHints="password"
+        android:hint="@string/password"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/usernameEditText"
-        app:layout_constraintStart_toStartOf="parent"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/usernameEditText" />
 
+    <!-- Role Input -->
     <EditText
         android:id="@+id/roleEditText"
-        android:layout_width="0dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Role"
-        app:layout_constraintTop_toBottomOf="@id/passwordEditText"
-        app:layout_constraintStart_toStartOf="parent"
+        android:autofillHints="role"
+        android:hint="@string/role"
+        android:inputType="text"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
 
+    <!-- Add Button -->
     <Button
         android:id="@+id/addUserButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add User"
+        android:text="@string/add_user"
         app:layout_constraintTop_toBottomOf="@id/roleEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginEnd="8dp" />
 
+    <!-- Update Button -->
+    <Button
+        android:id="@+id/updateUserButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/update_user"
+        app:layout_constraintTop_toBottomOf="@id/roleEditText"
+        app:layout_constraintStart_toEndOf="@id/addUserButton"
+        android:layout_marginEnd="8dp" />
+
+    <!-- Delete Button -->
+    <Button
+        android:id="@+id/deleteUserButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_user"
+        app:layout_constraintTop_toBottomOf="@id/roleEditText"
+        app:layout_constraintStart_toEndOf="@id/updateUserButton" />
+
+    <!-- RecyclerView for User List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/usersRecyclerView"
         android:layout_width="0dp"
