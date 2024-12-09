@@ -35,4 +35,27 @@
     <string name="jmc_logo">JMC Logo</string>
     <string name="cite_logo">CITE Logo</string>
     <string name="welcome_admin">Welcome, Admin</string>
+    <string name="enter">Enter</string>
+    <string name="profile_management">Profile Management</string>
+    <string name="change_username">Change Username</string>
+    <string name="change_password">Change Password</string>
+    <string name="notifications">Notifications</string>
+    <string name="enable_disable_notifications">Enable/Disable Notifications</string>
+    <string name="app_preferences">App Preferences</string>
+    <string name="theme_selection">Theme Selection</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="log_out">Log Out</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="about">About</string>
+    <string name="app_version">App Version</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="admin">Admin</string>
+    <string name="user">User</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="register">Register</string>
+    <string name="role_admin_user">Role (admin/user)</string>
+    <string name="already_registered_login_here">Already Registered? Login here</string>
+    <string name="show_password">Show Password</string>
 </resources>

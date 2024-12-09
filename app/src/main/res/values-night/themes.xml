@@ -1,7 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme for Night Mode. -->
     <style name="Base.Theme.CITE_IMS" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#000000</item> <!-- Black primary color -->
+        <item name="colorPrimaryVariant">#121212</item> <!-- Darker black -->
+        <item name="colorOnPrimary">#FFFFFF</item> <!-- White for text/icons on black -->
+
+        <item name="colorSecondary">#BB86FC</item> <!-- Purple secondary color -->
+        <item name="colorSecondaryVariant">#3700B3</item> <!-- Darker purple -->
+        <item name="colorOnSecondary">#000000</item> <!-- Black for text/icons on purple -->
+
+        <item name="android:windowBackground">#121212</item> <!-- Dark background -->
+        <item name="colorSurface">#121212</item> <!-- Dark for surfaces -->
+        <item name="colorOnSurface">#FFFFFF</item> <!-- Text on dark surface -->
+
+        <item name="colorError">#CF6679</item> <!-- Error color -->
+        <item name="colorOnError">#000000</item> <!-- Text on error color -->
+
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- White for primary text -->
+        <item name="android:textColorSecondary">#BB86FC</item> <!-- Purple for secondary text -->
+
+        <item name="android:statusBarColor">#000000</item> <!-- Black -->
+        <item name="android:navigationBarColor">#121212</item> <!-- Darker black -->
+
+        <item name="android:buttonTint">#BB86FC</item> <!-- Purple tint for buttons -->
     </style>
 </resources>

@@ -8,16 +8,16 @@
 
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login"
         android:textAlignment="center"
+        android:text="@string/register"
         android:textSize="25sp"
         android:textColor="@color/primaryText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp" />
+        android:layout_marginTop="30dp" />
 
     <EditText
         android:id="@+id/usernameEditText"
@@ -27,7 +27,6 @@
         android:autofillHints="username"
         android:backgroundTint="@color/primaryText"
         android:hint="@string/username"
-        android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textColor="@color/primaryText"
@@ -61,54 +60,45 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
-    <LinearLayout
-        android:id="@+id/buttonContainer"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="250dp"
+    <EditText
+        android:id="@+id/roleEditText"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/showPasswordCheckBox"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:autofillHints="role"
+        android:backgroundTint="@color/primaryText"
+        android:hint="@string/role_admin_user"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textColor="@color/primaryText"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
-
-        <Button
-            android:id="@+id/adminButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/buttonBackground"
-            android:text="@string/admin"
-            android:textColor="@color/buttonText" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"/>
-
-        <Button
-            android:id="@+id/userButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/buttonBackground"
-            android:text="@string/user"
-            android:textColor="@color/buttonText" />
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/showPasswordCheckBox" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/registerButton"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="@string/login"
+        android:text="@string/register"
         android:backgroundTint="@color/buttonBackground"
         android:textColor="@color/buttonText"
-        app:layout_constraintTop_toBottomOf="@id/buttonContainer"
+        app:layout_constraintTop_toBottomOf="@id/roleEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/loginTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:minHeight="48dp"
+        android:text="@string/already_registered_login_here"
+        android:textColor="@color/primaryText"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registerButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
