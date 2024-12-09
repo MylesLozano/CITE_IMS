@@ -58,4 +58,8 @@
     <string name="role_admin_user">Role (admin/user)</string>
     <string name="already_registered_login_here">Already Registered? Login here</string>
     <string name="show_password">Show Password</string>
+    <string name="left_logo">Left Logo</string>
+    <string name="right_logo">Right Logo</string>
+    <string name="get_started">Get Started!</string>
+    <string name="item_image">Item Image</string>
 </resources>

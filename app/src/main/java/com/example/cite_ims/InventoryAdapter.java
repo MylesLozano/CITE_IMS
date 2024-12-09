@@ -8,12 +8,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,16 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
         InventoryItem item = inventoryList.get(holder.getBindingAdapterPosition());
         holder.name.setText(item.getName());
         holder.quantity.setText(String.valueOf(item.getQuantity()));
+
+        // Load the image using Glide
+        if (item.getImageUri() != null) {
+            Glide.with(holder.itemView.getContext())
+                    .load(item.getImageUri())
+                    .placeholder(R.drawable.ic_placeholder_image)
+                    .into(holder.imageView);
+        } else {
+            holder.imageView.setImageResource(R.drawable.ic_placeholder_image);
+        }
 
         if (isAdmin) {
             holder.editButton.setVisibility(View.VISIBLE);
@@ -105,19 +118,21 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
         @SuppressWarnings("unchecked")
         protected void publishResults(CharSequence constraint, FilterResults results) {
             inventoryList.clear();
-            inventoryList.addAll((List) results.values);
+            inventoryList.addAll((List<InventoryItem>) results.values);
             notifyDataSetChanged();
         }
     };
 
     static class InventoryViewHolder extends RecyclerView.ViewHolder {
         TextView name, quantity;
+        ImageView imageView; // ImageView for displaying item image
         Button editButton, deleteButton;
 
-        public InventoryViewHolder(@NonNull View itemView) {
+        InventoryViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             quantity = itemView.findViewById(R.id.quantity);
+            imageView = itemView.findViewById(R.id.itemImageView); // Initialize the ImageView
             editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
         }
@@ -143,7 +158,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
         builder.setPositiveButton("Update", (dialog, which) -> {
             String name = nameEditText.getText().toString().trim();
             int quantity = Integer.parseInt(quantityEditText.getText().toString().trim());
-            dbHelper.updateItem(item.getItemId(), name, quantity);
+            dbHelper.updateItem(item.getItemId(), name, quantity, item.getImageUri()); // Include image URI
             item.setName(name);
             item.setQuantity(quantity);
             notifyItemChanged(position);

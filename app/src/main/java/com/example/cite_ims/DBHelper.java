@@ -13,7 +13,7 @@ import javax.crypto.SecretKey;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "inventory.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2; // Increment version to handle new image column
 
     public static final String TABLE_USERS = "users";
     public static final String COLUMN_USER_ID = "user_id";
@@ -25,6 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ITEM_ID = "item_id";
     public static final String COLUMN_ITEM_NAME = "name";
     public static final String COLUMN_ITEM_QUANTITY = "quantity";
+    public static final String COLUMN_ITEM_IMAGE_URI = "image_uri"; // New column for image URI
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,7 +42,8 @@ public class DBHelper extends SQLiteOpenHelper {
         String createInventoryTable = "CREATE TABLE " + TABLE_INVENTORY + " (" +
                 COLUMN_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ITEM_NAME + " TEXT, " +
-                COLUMN_ITEM_QUANTITY + " INTEGER)";
+                COLUMN_ITEM_QUANTITY + " INTEGER, " +
+                COLUMN_ITEM_IMAGE_URI + " TEXT)"; // Include new column for image URI
 
         db.execSQL(createUserTable);
         db.execSQL(createInventoryTable);
@@ -49,9 +51,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INVENTORY);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + TABLE_INVENTORY + " ADD COLUMN " + COLUMN_ITEM_IMAGE_URI + " TEXT");
+        }
     }
 
     public void addUser(String username, String password, String role) {
@@ -126,11 +128,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return result > 0;
     }
 
-    public void addItem(String name, int quantity) {
+    public void addItem(String name, int quantity, String imageUri) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_ITEM_NAME, name);
         contentValues.put(COLUMN_ITEM_QUANTITY, quantity);
+        contentValues.put(COLUMN_ITEM_IMAGE_URI, imageUri); // Add image URI
 
         db.insert(TABLE_INVENTORY, null, contentValues);
         db.close();
@@ -149,18 +152,20 @@ public class DBHelper extends SQLiteOpenHelper {
                 int itemId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ITEM_ID));
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ITEM_NAME));
                 int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ITEM_QUANTITY));
-                items.add(new InventoryItem(itemId, name, quantity));
+                String imageUri = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ITEM_IMAGE_URI)); // Get image URI
+                items.add(new InventoryItem(itemId, name, quantity, imageUri)); // Include image URI
             } while (cursor.moveToNext());
         }
         cursor.close();
         return items;
     }
 
-    public void updateItem(int itemId, String name, int quantity) {
+    public void updateItem(int itemId, String name, int quantity, String imageUri) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_ITEM_NAME, name);
         contentValues.put(COLUMN_ITEM_QUANTITY, quantity);
+        contentValues.put(COLUMN_ITEM_IMAGE_URI, imageUri); // Add image URI
 
         db.update(TABLE_INVENTORY, contentValues, COLUMN_ITEM_ID + " = ?", new String[]{String.valueOf(itemId)});
         db.close();
@@ -178,6 +183,6 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, new String[]{username, role});
         boolean exists = cursor.getCount() > 0;
         cursor.close();
-        return !exists;
+        return exists;
     }
 }

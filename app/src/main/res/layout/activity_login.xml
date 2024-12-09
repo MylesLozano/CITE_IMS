@@ -4,20 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/background">
+    android:background="@drawable/bg_1">
 
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="@string/login"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
         android:textSize="25sp"
-        android:textColor="@color/primaryText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/usernameEditText"
@@ -31,6 +32,7 @@
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textColor="@color/primaryText"
+        android:textColorHint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView" />
@@ -46,6 +48,7 @@
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:textColor="@color/primaryText"
+        android:textColorHint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/usernameEditText" />
@@ -54,12 +57,12 @@
         android:id="@+id/showPasswordCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/show_password"
-        android:textColor="@color/primaryText"
-        app:layout_constraintTop_toBottomOf="@id/passwordEditText"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#FBE9E7"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
 
     <LinearLayout
         android:id="@+id/buttonContainer"
@@ -78,9 +81,9 @@
             android:layout_width="5dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/buttonBackground"
+            android:backgroundTint="#36D11B"
             android:text="@string/admin"
-            android:textColor="@color/buttonText" />
+            android:textColor="@color/primaryText" />
 
         <TextView
             android:layout_width="0dp"
@@ -94,9 +97,9 @@
             android:layout_width="5dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/buttonBackground"
+            android:backgroundTint="#29DBC4"
             android:text="@string/user"
-            android:textColor="@color/buttonText" />
+            android:textColor="@color/primaryText" />
     </LinearLayout>
 
     <Button
@@ -104,8 +107,8 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        android:backgroundTint="@color/buttonBackground"
-        android:textColor="@color/buttonText"
+        android:backgroundTint="#31D316"
+        android:textColor="@color/primaryText"
         app:layout_constraintTop_toBottomOf="@id/buttonContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

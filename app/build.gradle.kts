@@ -33,6 +33,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.activity.ktx)
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
     implementation(libs.zxing.android.embedded)
     implementation(libs.core)
     implementation(libs.recyclerview)

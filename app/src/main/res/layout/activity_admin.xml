@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/background">
+    android:background="@drawable/gradient_background2">
 
     <ImageButton
         android:id="@+id/settingsButton"
@@ -35,27 +35,41 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.021" />
 
-    <Button
-        android:id="@+id/addItemButton"
-        android:layout_width="300dp"
+    <TextView
+        android:id="@+id/addItemTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_item"
+        android:textSize="28sp"
+        android:textColor="@color/primaryText"
+        app:layout_constraintEnd_toStartOf="@id/addItemButton"
+        app:layout_constraintTop_toTopOf="@id/addItemButton"
+        app:layout_constraintBottom_toBottomOf="@id/addItemButton"
+        app:layout_constraintHorizontal_bias="1.0" />
+
+    <ImageButton
+        android:id="@+id/addItemButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/add_item"
+        android:padding="3dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintHorizontal_bias="0.667"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.139" />
+        app:layout_constraintVertical_bias="0.119" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addItemButton"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@id/addItemButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

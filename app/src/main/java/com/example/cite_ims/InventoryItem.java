@@ -4,11 +4,13 @@ public class InventoryItem {
     private final int itemId;
     private String name;
     private int quantity;
+    private String imageUri;  // New field for image URI
 
-    public InventoryItem(int itemId, String name, int quantity) {
+    public InventoryItem(int itemId, String name, int quantity, String imageUri) {
         this.itemId = itemId;
         this.name = name;
         this.quantity = quantity;
+        this.imageUri = imageUri;  // Initialize the new field
     }
 
     public int getItemId() {
@@ -23,11 +25,19 @@ public class InventoryItem {
         return quantity;
     }
 
+    public String getImageUri() {
+        return imageUri;  // Getter for the new field
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;  // Setter for the new field
     }
 }
