@@ -38,6 +38,6 @@ public class InventoryItem {
     }
 
     public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;  // Setter for the new field
+        this.imageUri = imageUri;
     }
 }

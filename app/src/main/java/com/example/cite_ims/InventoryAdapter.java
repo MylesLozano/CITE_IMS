@@ -1,6 +1,8 @@
 package com.example.cite_ims;
 
-import android.text.InputType;
+import android.Manifest;
+import android.net.Uri;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,15 +26,47 @@ import java.util.List;
 
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryViewHolder> implements Filterable {
     private List<InventoryItem> inventoryList;
-    private final List<InventoryItem> inventoryListFull; // Full copy of the inventory list for filtering
+    private final List<InventoryItem> inventoryListFull;
     private final DBHelper dbHelper;
     private final boolean isAdmin;
 
-    public InventoryAdapter(List<InventoryItem> inventoryList, DBHelper dbHelper, boolean isAdmin) {
+    private final ActivityResultLauncher<String> requestPermissionLauncher;
+    private final ActivityResultLauncher<String> newPhotoPicker;
+
+    private InventoryItem currentEditingItem;
+
+    private OnImageSelectedListener imageSelectedListener; // Store the listener
+
+    // Interface for image selection callback
+    public interface OnImageSelectedListener {
+        void onImageSelected(Uri imageUri);
+    }
+
+    // Setter for image selection listener
+    public void setOnImageSelectedListener(OnImageSelectedListener listener) {
+        this.imageSelectedListener = listener;
+    }
+
+    // Constructor for Admin context
+    public InventoryAdapter(List<InventoryItem> inventoryList, DBHelper dbHelper, boolean isAdmin,
+                            ActivityResultLauncher<String> requestPermissionLauncher,
+                            ActivityResultLauncher<String> newPhotoPicker) {
         this.inventoryList = inventoryList;
-        this.inventoryListFull = new ArrayList<>(inventoryList); // Initialize the full list
+        this.inventoryListFull = new ArrayList<>(inventoryList);
         this.dbHelper = dbHelper;
         this.isAdmin = isAdmin;
+        this.requestPermissionLauncher = requestPermissionLauncher;
+        this.newPhotoPicker = newPhotoPicker;
+    }
+
+    // Constructor for User context
+    public InventoryAdapter(List<InventoryItem> inventoryList, DBHelper dbHelper, boolean isAdmin) {
+        this.inventoryList = inventoryList;
+        this.inventoryListFull = new ArrayList<>(inventoryList);
+        this.dbHelper = dbHelper;
+        this.isAdmin = isAdmin;
+        this.requestPermissionLauncher = null;
+        this.newPhotoPicker = null;
     }
 
     @NonNull
@@ -82,7 +117,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
     public void updateItems(List<InventoryItem> items) {
         this.inventoryList = items;
         this.inventoryListFull.clear();
-        this.inventoryListFull.addAll(items); // Update the full list as well
+        this.inventoryListFull.addAll(items);
         notifyDataSetChanged();
     }
 
@@ -95,22 +130,18 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<InventoryItem> filteredList = new ArrayList<>();
-
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(inventoryListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-
                 for (InventoryItem item : inventoryListFull) {
                     if (item.getName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
             }
-
             FilterResults results = new FilterResults();
             results.values = filteredList;
-
             return results;
         }
 
@@ -125,20 +156,22 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
 
     static class InventoryViewHolder extends RecyclerView.ViewHolder {
         TextView name, quantity;
-        ImageView imageView; // ImageView for displaying item image
+        ImageView imageView;
         Button editButton, deleteButton;
 
         InventoryViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             quantity = itemView.findViewById(R.id.quantity);
-            imageView = itemView.findViewById(R.id.itemImageView); // Initialize the ImageView
+            imageView = itemView.findViewById(R.id.itemImageView);
             editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
         }
     }
 
     private void showEditItemDialog(InventoryViewHolder holder, InventoryItem item, int position) {
+        currentEditingItem = item;
+
         AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
         builder.setTitle("Edit Item");
 
@@ -151,19 +184,65 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
 
         final EditText quantityEditText = new EditText(holder.itemView.getContext());
         quantityEditText.setText(String.valueOf(item.getQuantity()));
-        quantityEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
         layout.addView(quantityEditText);
+
+        final ImageView imageView = new ImageView(holder.itemView.getContext());
+
+        // Load current image
+        if (item.getImageUri() != null) {
+            Glide.with(holder.itemView.getContext())
+                    .load(item.getImageUri())
+                    .placeholder(R.drawable.ic_placeholder_image)
+                    .into(imageView);
+        } else {
+            imageView.setImageResource(R.drawable.ic_placeholder_image);
+        }
+
+        layout.addView(imageView);
+
+        imageView.setOnClickListener(v -> {
+            if (requestPermissionLauncher != null && newPhotoPicker != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
+                } else {
+                    requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+                }
+                newPhotoPicker.launch("image/*");
+            }
+        });
 
         builder.setView(layout);
         builder.setPositiveButton("Update", (dialog, which) -> {
-            String name = nameEditText.getText().toString().trim();
-            int quantity = Integer.parseInt(quantityEditText.getText().toString().trim());
-            dbHelper.updateItem(item.getItemId(), name, quantity, item.getImageUri()); // Include image URI
+            String name = nameEditText.getText().toString();
+            int quantity = Integer.parseInt(quantityEditText.getText().toString());
+
             item.setName(name);
             item.setQuantity(quantity);
+
+            dbHelper.updateItem(item.getItemId(), name, quantity, item.getImageUri());
             notifyItemChanged(position);
         });
+
         builder.setNegativeButton("Cancel", null);
         builder.show();
+    }
+
+    // Method to update the image URI for the current editing item
+    public void updateCurrentItemImage(Uri imageUri) {
+        if (currentEditingItem != null) {
+            // Update the item with the new image URI
+            currentEditingItem.setImageUri(imageUri.toString());
+
+            // Update the item in the database
+            dbHelper.updateItem(
+                    currentEditingItem.getItemId(),
+                    currentEditingItem.getName(),
+                    currentEditingItem.getQuantity(),
+                    imageUri.toString()
+            );
+
+            // Notify the adapter to update the UI
+            notifyItemChanged(inventoryList.indexOf(currentEditingItem));
+        }
     }
 }

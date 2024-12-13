@@ -13,7 +13,7 @@ import javax.crypto.SecretKey;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "inventory.db";
-    public static final int DATABASE_VERSION = 2; // Increment version to handle new image column
+    public static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_USERS = "users";
     public static final String COLUMN_USER_ID = "user_id";
@@ -25,7 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ITEM_ID = "item_id";
     public static final String COLUMN_ITEM_NAME = "name";
     public static final String COLUMN_ITEM_QUANTITY = "quantity";
-    public static final String COLUMN_ITEM_IMAGE_URI = "image_uri"; // New column for image URI
+    public static final String COLUMN_ITEM_IMAGE_URI = "image_uri";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ITEM_NAME + " TEXT, " +
                 COLUMN_ITEM_QUANTITY + " INTEGER, " +
-                COLUMN_ITEM_IMAGE_URI + " TEXT)"; // Include new column for image URI
+                COLUMN_ITEM_IMAGE_URI + " TEXT)";
 
         db.execSQL(createUserTable);
         db.execSQL(createInventoryTable);
@@ -61,9 +61,14 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_USER_USERNAME, username);
         try {
-            SecretKey key = EncryptionUtils.generateKeyFromPassword(username); // Dynamic key based on username
+            SecretKey key = EncryptionUtils.generateKeyFromPassword(username);
             String encryptedPassword = EncryptionUtils.encrypt(password, key);
-            contentValues.put(COLUMN_USER_PASSWORD, encryptedPassword);
+            if (encryptedPassword != null) {
+                contentValues.put(COLUMN_USER_PASSWORD, encryptedPassword);
+                Log.d("DBHelper", "Encrypted Password: " + encryptedPassword);
+            } else {
+                Log.e("DBHelper", "Encrypted password is null");
+            }
         } catch (Exception e) {
             Log.e("DBHelper", "Error encrypting password", e);
         }
@@ -80,7 +85,7 @@ public class DBHelper extends SQLiteOpenHelper {
             try {
                 int passwordIndex = cursor.getColumnIndex(COLUMN_USER_PASSWORD);
                 if (passwordIndex >= 0) {
-                    SecretKey key = EncryptionUtils.generateKeyFromPassword(username); // Dynamic key based on username
+                    SecretKey key = EncryptionUtils.generateKeyFromPassword(username);
                     String storedPassword = cursor.getString(passwordIndex);
                     String decryptedPassword = EncryptionUtils.decrypt(storedPassword, key);
                     if (decryptedPassword.equals(password)) {
@@ -109,7 +114,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         try {
-            SecretKey key = EncryptionUtils.generateKeyFromPassword(username); // Dynamic key based on username
+            SecretKey key = EncryptionUtils.generateKeyFromPassword(username);
             String encryptedPassword = EncryptionUtils.encrypt(newPassword, key);
             contentValues.put(COLUMN_USER_PASSWORD, encryptedPassword);
         } catch (Exception e) {
@@ -133,7 +138,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_ITEM_NAME, name);
         contentValues.put(COLUMN_ITEM_QUANTITY, quantity);
-        contentValues.put(COLUMN_ITEM_IMAGE_URI, imageUri); // Add image URI
+        contentValues.put(COLUMN_ITEM_IMAGE_URI, imageUri);
 
         db.insert(TABLE_INVENTORY, null, contentValues);
         db.close();
@@ -166,9 +171,8 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_NAME, name);
         contentValues.put(COLUMN_ITEM_QUANTITY, quantity);
         contentValues.put(COLUMN_ITEM_IMAGE_URI, imageUri); // Add image URI
-
-        db.update(TABLE_INVENTORY, contentValues, COLUMN_ITEM_ID + " = ?", new String[]{String.valueOf(itemId)});
-        db.close();
+            db.update(TABLE_INVENTORY, contentValues, COLUMN_ITEM_ID + " = ?", new String[]{String.valueOf(itemId)});
+            db.close();
     }
 
     public void deleteItem(int itemId) {

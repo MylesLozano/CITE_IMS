@@ -62,4 +62,5 @@
     <string name="right_logo">Right Logo</string>
     <string name="get_started">Get Started!</string>
     <string name="item_image">Item Image</string>
+    <string name="back">Back</string>
 </resources>

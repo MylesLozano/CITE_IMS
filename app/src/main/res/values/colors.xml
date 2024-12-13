@@ -1,4 +1,8 @@
 <resources>
+    <color name="loginPressed">#2B5025</color>
+    <color name="loginNotPressed">#36D11B</color>
+    <color name="userPressed">#366660</color>
+    <color name="userNotPressed">#29DBC4</color>
     <color name="primaryText">#000000</color>
     <color name="secondaryText">#757575</color>
     <color name="buttonBackground">#FF6200EE</color>

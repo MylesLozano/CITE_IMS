@@ -1,15 +1,20 @@
-package com.example.cite_ims;
+package activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Patterns;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cite_ims.DBHelper;
+import com.example.cite_ims.R;
 
 public class RegisterActivity extends AppCompatActivity {
     private DBHelper dbHelper;
@@ -20,6 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        ImageButton backButton = findViewById(R.id.backButton);
         dbHelper = new DBHelper(this);
         usernameEditText = findViewById(R.id.usernameEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
@@ -30,6 +36,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         registerButton.setOnClickListener(v -> registerUser());
         loginTextView.setOnClickListener(v -> navigateToLogin());
+
+        backButton.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
+        this.getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        });
 
         showPasswordCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -48,11 +63,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (username.isEmpty() || password.isEmpty() || role.isEmpty()) {
             Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-            Toast.makeText(this, "Invalid username format", Toast.LENGTH_SHORT).show();
             return;
         }
 

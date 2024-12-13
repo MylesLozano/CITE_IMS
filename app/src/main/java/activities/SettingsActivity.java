@@ -1,4 +1,4 @@
-package com.example.cite_ims;
+package activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,12 +6,17 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+
+import com.example.cite_ims.DBHelper;
+import com.example.cite_ims.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -25,6 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         dbHelper = new DBHelper(this);
 
+        ImageButton backButton = findViewById(R.id.backButton);
         Button changeUsernameButton = findViewById(R.id.changeUsernameButton);
         Button changePasswordButton = findViewById(R.id.changePasswordButton);
         Button enableNotificationsButton = findViewById(R.id.enableNotificationsButton);
@@ -34,6 +40,15 @@ public class SettingsActivity extends AppCompatActivity {
         Button appVersionButton = findViewById(R.id.appVersionButton);
         Button termsOfServiceButton = findViewById(R.id.termsOfServiceButton);
         Button privacyPolicyButton = findViewById(R.id.privacyPolicyButton);
+
+        backButton.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
+        this.getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        });
 
         changeUsernameButton.setOnClickListener(v -> showChangeUsernameDialog());
 

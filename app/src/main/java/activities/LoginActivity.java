@@ -1,4 +1,4 @@
-package com.example.cite_ims;
+package activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,8 +8,14 @@ import android.text.InputType;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cite_ims.DBHelper;
+import com.example.cite_ims.R;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText usernameEditText, passwordEditText;
@@ -23,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        ImageButton backButton = findViewById(R.id.backButton);
         usernameEditText = findViewById(R.id.usernameEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         CheckBox showPasswordCheckBox = findViewById(R.id.showPasswordCheckBox);
@@ -31,16 +38,25 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.loginButton);
         dbHelper = new DBHelper(this);
 
+        backButton.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
+        this.getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        });
+
         adminButton.setOnClickListener(v -> {
             selectedRole = "admin";
-            adminButton.setBackgroundColor(Color.GRAY);
-            userButton.setBackgroundColor(Color.LTGRAY);
+            adminButton.setBackgroundColor(Color.parseColor("#2B5025"));
+            userButton.setBackgroundColor(Color.parseColor("#29DBC4"));
         });
 
         userButton.setOnClickListener(v -> {
             selectedRole = "user";
-            userButton.setBackgroundColor(Color.GRAY);
-            adminButton.setBackgroundColor(Color.LTGRAY);
+            userButton.setBackgroundColor(Color.parseColor("#366660"));
+            adminButton.setBackgroundColor(Color.parseColor("#36D11B"));
         });
 
         loginButton.setOnClickListener(v -> loginUser());
@@ -53,16 +69,6 @@ public class LoginActivity extends AppCompatActivity {
             }
             passwordEditText.setSelection(passwordEditText.length());
         });
-
-        // Add default admin user if not exists
-        if (dbHelper.checkUserExists("admin", "admin")) {
-            dbHelper.addUser("admin", "admin", "admin");
-        }
-
-        // Add default normal user if not exists
-        if (dbHelper.checkUserExists("user", "user")) {
-            dbHelper.addUser("user", "user", "user");
-        }
     }
 
     private void loginUser() {

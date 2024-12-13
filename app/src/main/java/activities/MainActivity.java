@@ -1,10 +1,12 @@
-package com.example.cite_ims;
+package activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cite_ims.R;
 
 public class MainActivity extends AppCompatActivity {
 
