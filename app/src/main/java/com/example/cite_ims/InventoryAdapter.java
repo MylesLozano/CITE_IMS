@@ -35,18 +35,6 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.Inve
 
     private InventoryItem currentEditingItem;
 
-    private OnImageSelectedListener imageSelectedListener; // Store the listener
-
-    // Interface for image selection callback
-    public interface OnImageSelectedListener {
-        void onImageSelected(Uri imageUri);
-    }
-
-    // Setter for image selection listener
-    public void setOnImageSelectedListener(OnImageSelectedListener listener) {
-        this.imageSelectedListener = listener;
-    }
-
     // Constructor for Admin context
     public InventoryAdapter(List<InventoryItem> inventoryList, DBHelper dbHelper, boolean isAdmin,
                             ActivityResultLauncher<String> requestPermissionLauncher,
