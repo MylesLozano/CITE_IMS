@@ -1,3 +1,4 @@
+
 package com.example.cite_ims;
 
 public class InventoryItem {
